@@ -15,7 +15,7 @@ namespace DebuggerDemo
                 var condition = true;
 
                 // 少用
-                //Debugger.Log(i, category, $"This is a debug message for {category}.\n");
+                Debugger.Log(i, category, $"This is a debug message using Debbuger.\n");
 
                 // 常用
                 Debug.Write($"[{category}]");
