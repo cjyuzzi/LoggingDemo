@@ -4,7 +4,7 @@ namespace EventSourceDemo
 {
     public class Program
     {
-        private static readonly MemberEventSource _eventSource = MemberEventSource.Instance;
+        private static readonly MemberSource _eventSource = MemberSource.Instance;
 
         public static void Main(string[] args)
         {
