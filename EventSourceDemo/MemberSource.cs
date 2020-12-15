@@ -19,5 +19,11 @@ namespace EventSourceDemo
         /// </summary>
         [Event(1)]
         public void OnLogin(string member, string ipAddress) => WriteEvent(1, member, ipAddress);
+
+        /// <summary>
+        /// 自訂登出事件：紀錄會員資訊及登入的 IP 位置。
+        /// </summary>
+        [Event(2)]
+        public void OnLogout(string member, string ipAddress) => WriteEvent(2, member, ipAddress);
     }
 }

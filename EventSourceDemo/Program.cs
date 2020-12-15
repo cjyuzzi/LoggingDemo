@@ -23,6 +23,8 @@ namespace EventSourceDemo
 
             Login(member);
 
+            Logout(member);
+
             Console.ReadKey();
         }
 
@@ -40,6 +42,21 @@ namespace EventSourceDemo
 
             // 紀錄日誌
             _eventSource.OnLogin(member.ToString(), ip);
+        }
+
+        /// <summary>
+        /// 模擬執行登出。
+        /// </summary>
+        /// <param name="member">強型別的會員資料。</param>
+        private static void Logout(Member member){
+            var ip = GetIpAddress();
+
+            // 執行登出動作
+
+            // ...
+
+            // 紀錄日誌
+            _eventSource.OnLogout(member.ToString(), ip);
         }
 
         private static string GetIpAddress() => "10.42.32.93";
