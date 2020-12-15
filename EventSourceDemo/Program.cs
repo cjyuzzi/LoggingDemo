@@ -8,6 +8,8 @@ namespace EventSourceDemo
 
         public static void Main(string[] args)
         {
+            var listener = new MemberSourceListener();
+
             var member = new Member
             {
                 ID = Guid.NewGuid(),
@@ -20,9 +22,6 @@ namespace EventSourceDemo
             };
 
             Login(member);
-
-            // EventSource 名稱即為 Class 名稱。
-            Console.WriteLine($"EventSource 名稱：{_eventSource.Name}");
 
             Console.ReadKey();
         }
