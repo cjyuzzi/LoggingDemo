@@ -1,12 +1,30 @@
 ﻿using System;
+using System.Diagnostics;
 
-namespace Debugger
+namespace DebuggerDemo
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var categories = new string[] { "國文", "英文", "數學", "自然", "社會" };
+
+            for (int i = 0; i < 5; i++)
+            {
+                var category = categories[i];
+                var condition = true;
+
+                // 少用
+                //Debugger.Log(i, category, $"This is a debug message for {category}.\n");
+
+                // 常用
+                Debug.Write($"[{category}]");
+                Debug.WriteLine(" This is a debug message.");
+                Debug.WriteIf(condition, $"[True]");
+                Debug.WriteLineIf(condition, "Writig line if true.");
+            }
+
+            Console.ReadKey();
         }
     }
 }
