@@ -7,45 +7,52 @@ namespace TraceSourceDemo
     {
         public static void Main(string[] args)
         {
-            // 指定名稱與最低紀錄等級建立 TraceSource 物件。
-            // SourceLevels：指定需要紀錄事件的最低等級，可嘗試指定不同的 SourceLevels 觀察差異。
-            var source = new TraceSource("Twice", SourceLevels.Warning);
+            #region TraceSource
 
-            Console.WriteLine("TraceSource created.");
+            // 1. 決定 TraceSource 名稱。
+            // 2. 決定 SourceLevels 需要紀錄的最低事件等級。
+            // 3. 建立 TraceSource 實體。
+            var source = new TraceSource("Twice", SourceLevels.Warning);
 
             ShowSourceSwitch(source);
 
-            // 在所有事件等級都會被紀錄的條件下，觀察在不同的 SourceLevels 會有何差異。
+            PrintDefaultListners();
+
+            // 4. 分發事件給註冊的 TraceListener。
             TraceEventAllLevels(source);
 
-            // 觀察 TraceSource 預設有哪些監聽器（Listener）。
-            Console.Write("預設");
-            PrintListners(source);
+            #endregion
 
-            // 註冊自訂的輸出通道 ConsoleTraceListener 監聽器。
+            #region TraceListener
+
+            // 1. 建立自訂的 TraceListener 輸出通道。
             var console = new ConsoleTraceListener()
             {
-                // TraceFilter: 會過濾來自於 TraceSource 的紀錄訊息。系統預設提供：EventTypeFilter 與 SourceFilter。
-                Filter = new SourceFilter("Twice"),
-                // TraceOptions: 決定實際要輸出哪些上下文資訊。（該列舉標記了 FlagsAttribute，因此可以任意組合）
+                // 2. 建立自訂的 TraceFilter 事件過濾器，或使用系統提供的 EventTypeFilter 或是 SourceFilter。
+                Filter = new CustomTraceFilter(),
+
+                // 3. 決定實際要添加在輸出的 TraceOptions 上下文資訊內容。（該列舉標記了 FlagsAttribute，因此可以任意組合。）
                 TraceOutputOptions = TraceOptions.ThreadId | TraceOptions.DateTime,
 
-                // 縮排設定
-                IndentLevel = 5,
-                IndentSize = 5
             };
+
+            // 4. 註冊 TraceListener 到 TraceSource 訂閱分發的事件紀錄。
             source.Listeners.Add(console);
 
             PrintListners(source);
 
-            // 觀察 ConsoleTraceListener 是否有監聽到事件並紀錄訊息到 Console。
+            // 觀察實際事件紀錄的分發情形。
             TraceEventAllLevels(source);
+
+            #endregion
 
             Console.ReadKey();
         }
 
+        #region Private methods
+
         /// <summary>
-        /// TraceSource 會透過 SourceSwitch 判斷事件等級是否滿足最低事件等級。
+        /// 觀察 TraceSource 如何使用 SourceSwitch 決定是否紀錄事件給註冊的 TraceListener。
         /// </summary>
         private static void ShowSourceSwitch(TraceSource source)
         {
@@ -53,24 +60,28 @@ namespace TraceSourceDemo
             Console.WriteLine($"Switch Description: {source.Switch.Description}");
             Console.WriteLine($"Switch Level: {source.Switch.Level}");
 
-            // 取得所有等級判斷是否滿足最低事件等級。
+            // 取得所有的事件等級。
             var eventTypes = GetAllTraceEventTypes();
 
             for (int i = 0; i < eventTypes.Length; i++)
             {
                 var eventType = eventTypes[i];
 
-                // 透過 SourceSwitch 判斷該不該紀錄。
+                // TraceSource 透過 SourceSwitch 判斷是否滿足最低事件等級。判斷依據為建立 TraceSource 時傳入的 SourceLevels。
                 var shouldTrace = source.Switch.ShouldTrace(eventType) ? "enabled" : "disabled";
+
                 Console.WriteLine($"[{eventType}]: {shouldTrace}");
             }
         }
 
+        /// <summary>
+        /// 分發所有等級的事件給註冊的 TraceListener。
+        /// </summary>
         private static void TraceEventAllLevels(TraceSource source)
         {
             var eventID = 1;
 
-            // 取得所有等級並嘗試列出以便觀察差異。
+            // 取得所有事件等級。
             var eventTypes = GetAllTraceEventTypes();
 
             #region 事件類型說明
@@ -95,6 +106,7 @@ namespace TraceSourceDemo
 
             #endregion
 
+            // 分發所有等級的事件。
             for (int i = 0; i < eventTypes.Length; i++)
             {
                 var eventType = eventTypes[i];
@@ -103,9 +115,27 @@ namespace TraceSourceDemo
             }
         }
 
+        /// <summary>
+        /// 觀察特定 TraceSource 目前註冊了哪些 TraceListener。
+        /// </summary>
         private static void PrintListners(TraceSource source)
         {
-            Console.WriteLine($"監聽器有 {source.Listeners.Count} 個：");
+            Console.WriteLine($"TraceSource[{source.Name}] 目前的 TraceListener 有 {source.Listeners.Count} 個：");
+
+            foreach (TraceListener listener in source.Listeners)
+            {
+                Console.WriteLine($"\t{listener.GetType()}");
+            }
+        }
+
+        /// <summary>
+        /// 觀察 TraceSource 預設註冊了哪些 TraceListener。
+        /// </summary>
+        private static void PrintDefaultListners()
+        {
+            var source = new TraceSource("Default");
+
+            Console.WriteLine($"TraceSource 預設的 TraceListener 有 {source.Listeners.Count} 個：");
 
             foreach (TraceListener listener in source.Listeners)
             {
@@ -114,5 +144,7 @@ namespace TraceSourceDemo
         }
 
         private static TraceEventType[] GetAllTraceEventTypes() => (TraceEventType[])Enum.GetValues(typeof(TraceEventType));
+
+        #endregion
     }
 }
