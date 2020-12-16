@@ -23,7 +23,18 @@ namespace TraceSourceDemo
             PrintListners(source);
 
             // 註冊自訂的輸出通道 ConsoleTraceListener 監聽器。
-            source.Listeners.Add(new ConsoleTraceListener());
+            var console = new ConsoleTraceListener()
+            {
+                // TraceFilter: 會過濾來自於 TraceSource 的紀錄訊息。系統預設提供：EventTypeFilter 與 SourceFilter。
+                Filter = new SourceFilter("Twice"),
+                // TraceOptions: 決定實際要輸出哪些上下文資訊。（該列舉標記了 FlagsAttribute，因此可以任意組合）
+                TraceOutputOptions = TraceOptions.ThreadId | TraceOptions.DateTime,
+
+                // 縮排設定
+                IndentLevel = 5,
+                IndentSize = 5
+            };
+            source.Listeners.Add(console);
 
             PrintListners(source);
 
