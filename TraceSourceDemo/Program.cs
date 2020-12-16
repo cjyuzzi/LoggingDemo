@@ -12,7 +12,7 @@ namespace TraceSourceDemo
             // 1. 決定 TraceSource 名稱。
             // 2. 決定 SourceLevels 需要紀錄的最低事件等級。
             // 3. 建立 TraceSource 實體。
-            var source = new TraceSource("Twice", SourceLevels.Warning);
+            var source = new TraceSource("Demo", SourceLevels.Warning);
 
             ShowSourceSwitch(source);
 
@@ -25,8 +25,8 @@ namespace TraceSourceDemo
 
             #region TraceListener
 
-            // 1. 建立自訂的 TraceListener 輸出通道。
-            var console = new ConsoleTraceListener()
+            // 1. 建立自訂的 TraceListener 輸出通道，或使用系統提供的 TraceListener。
+            var console = new CustomTraceListener()
             {
                 // 2. 建立自訂的 TraceFilter 事件過濾器，或使用系統提供的 EventTypeFilter 或是 SourceFilter。
                 Filter = new CustomTraceFilter(),
@@ -36,7 +36,29 @@ namespace TraceSourceDemo
 
             };
 
-            // 4. 註冊 TraceListener 到 TraceSource 訂閱分發的事件紀錄。
+            // 4. 清除當前所有的 TraceListner。
+            source.Listeners.Clear();
+
+            #region 系統提供的 TraceListener 只有 5 個
+
+            // 輸出通道：偵錯器（Debugger）
+            source.Listeners.Add(new DefaultTraceListener());
+
+            // 輸出通道：檔案（透過 Stream 串流）
+            source.Listeners.Add(new TextWriterTraceListener());
+
+            // 輸出通道：主控台（Console）
+            source.Listeners.Add(new ConsoleTraceListener());
+
+            // 輸出通道：可以指定逗號作為分隔符號輸出 CSV 檔案（透過 Stream 串流）
+            source.Listeners.Add(new DelimitedListTraceListener("MyCSV") { Delimiter = "," });
+
+            //輸出通道：XML 檔案（透過 Stream 串流）
+            source.Listeners.Add(new XmlWriterTraceListener("MyXML"));
+
+            #endregion
+
+            // 5. 註冊 TraceListener 到 TraceSource 訂閱分發的事件紀錄。
             source.Listeners.Add(console);
 
             PrintListners(source);
@@ -59,6 +81,7 @@ namespace TraceSourceDemo
             Console.WriteLine($"Switch DisplayName: {source.Switch.DisplayName}");
             Console.WriteLine($"Switch Description: {source.Switch.Description}");
             Console.WriteLine($"Switch Level: {source.Switch.Level}");
+            Console.WriteLine();
 
             // 取得所有的事件等級。
             var eventTypes = GetAllTraceEventTypes();
@@ -72,6 +95,8 @@ namespace TraceSourceDemo
 
                 Console.WriteLine($"[{eventType}]: {shouldTrace}");
             }
+
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -113,6 +138,8 @@ namespace TraceSourceDemo
 
                 source.TraceEvent(eventType, eventID++, $"This is a {eventType} message.");
             }
+
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -126,6 +153,8 @@ namespace TraceSourceDemo
             {
                 Console.WriteLine($"\t{listener.GetType()}");
             }
+
+            Console.WriteLine();
         }
 
         /// <summary>
