@@ -7,6 +7,12 @@ namespace TraceSourceDemo
     {
         public static void Main(string[] args)
         {
+            // 當條件編譯符號有定義 TRACE 常數，TraceSource 與 Trace 類別內的方法才會被編譯。
+#if TRACE
+            Console.WriteLine("TRACE exists");
+            Console.WriteLine();
+#endif
+
             #region TraceSource
 
             // 1. 決定 TraceSource 名稱。
