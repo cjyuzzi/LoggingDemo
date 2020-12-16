@@ -59,7 +59,7 @@ namespace TraceSourceDemo
             // 輸出通道：可以指定逗號作為分隔符號輸出 CSV 檔案（透過 Stream 串流）
             source.Listeners.Add(new DelimitedListTraceListener("MyCSV") { Delimiter = "," });
 
-            //輸出通道：XML 檔案（透過 Stream 串流）
+            // 輸出通道：XML 檔案（透過 Stream 串流）
             source.Listeners.Add(new XmlWriterTraceListener("MyXML"));
 
             #endregion
@@ -71,6 +71,34 @@ namespace TraceSourceDemo
 
             // 觀察實際事件紀錄的分發情形。
             TraceEventAllLevels(source);
+
+            #endregion
+
+            #region Trace
+
+            // Trace 靜態類別可以想像成一個全域形式存在的 TraceSource 實體。
+            // Trace 沒有 SourceSwitch 的過濾機制。
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(console);
+
+            // 縮排相關：
+            Trace.IndentSize = 8;
+            Trace.IndentLevel = 0;
+            Trace.Indent();
+            Trace.Unindent();
+
+            // 緩衝機制相關：
+            Trace.AutoFlush = false;
+            Trace.Flush();
+
+            // 紀錄目前的執行序
+            Trace.CorrelationManager.StartLogicalOperation("MainThread");
+            Trace.CorrelationManager.StopLogicalOperation();
+
+            TraceEventWithTrace();
+
+            // 資源釋放
+            Trace.Close();
 
             #endregion
 
@@ -176,6 +204,28 @@ namespace TraceSourceDemo
             {
                 Console.WriteLine($"\t{listener.GetType()}");
             }
+        }
+
+        /// <summary>
+        /// 使用 Trace 靜態類別分發事件給已註冊的 TraceListener。
+        /// </summary>
+        private static void TraceEventWithTrace()
+        {
+            // 斷言：用於確認條件是否如預期般執行，如果不符合則顯示訊息。
+            Trace.Assert(true);
+
+            // 會呼叫所有註冊 TraceListener 物件的 TraceEvent 方法。
+            Trace.TraceInformation("Trace information with Trace.");
+            Trace.TraceWarning("Trace warning with Trace.");
+            Trace.TraceError("Trace error with Trace.");
+
+            // 會呼叫所有註冊 TraceListener 物件的 Write 和 WriteLIne 方法。
+            Trace.Write("Write with Trace.\n");
+            Trace.WriteIf(true, "Write if true with Trace.\n");
+            Trace.WriteLine("Write line with Trace.");
+            Trace.WriteLineIf(true, "Write line if true with Trace.");
+
+            Console.WriteLine();
         }
 
         private static TraceEventType[] GetAllTraceEventTypes() => (TraceEventType[])Enum.GetValues(typeof(TraceEventType));
