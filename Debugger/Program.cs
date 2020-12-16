@@ -9,7 +9,8 @@ namespace DebuggerDemo
         {
             var categories = new string[] { "國文", "英文", "數學", "自然", "社會" };
 
-            // 靜態類別 Debugger 是與偵錯器進行通訊的媒介，可利用它人為地啟動偵錯器、觸發中斷點或是使用 Debugger.Log() 紀錄訊息到偵錯器
+            // 靜態類別 Debugger 是與偵錯器進行通訊的媒介。
+            // 可利用它人為地啟動偵錯器、觸發中斷點或是使用 Debugger.Log() 紀錄訊息到偵錯器。
             #region Debugger
 
             // 可判斷偵錯器是否有啟動
@@ -32,7 +33,8 @@ namespace DebuggerDemo
 
             #endregion
 
-            // 靜態類別 Debug 能執行與偵錯相關的操作，並且這些操作程式碼只會在 DEBUG 模式下才會進行編譯，建議使用！
+            // 靜態類別 Debug 能執行與偵錯相關的操作。建議使用！
+            // 當條件編譯符號有定義 DEBUG 常數（DEBUG 模式），DEBUG 靜態類別內的公用方法才會被編譯。
             #region Debug
 
             for (int i = 0; i < 5; i++)
