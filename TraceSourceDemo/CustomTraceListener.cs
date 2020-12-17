@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace TraceSourceDemo
 {
     /// <summary>
-    /// 可透過繼承 TraceListener 抽象類別擴充事件紀錄的輸出通道。有不少功能，沒介紹到的請參閱相關的線上文件。
+    /// 可透過繼承 TraceListener 抽象類別擴充紀錄事件的輸出通道。有不少功能，沒介紹到的請參閱相關的線上文件。
     /// </summary>
     public class CustomTraceListener : TraceListener
     {

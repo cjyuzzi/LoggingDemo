@@ -7,7 +7,7 @@ namespace TraceSourceDemo
     {
         public static void Main(string[] args)
         {
-            // 當條件編譯符號有定義 TRACE 常數，TraceSource 與 Trace 類別內的方法才會被編譯。
+            // 當條件編譯符號有定義 TRACE 常數時，TraceSource 與 Trace 類別內的方法才會被編譯。
 #if TRACE
             Console.WriteLine("TRACE exists");
             Console.WriteLine();
@@ -67,7 +67,7 @@ namespace TraceSourceDemo
             // 5. 註冊 TraceListener 到 TraceSource 訂閱分發的事件紀錄。
             source.Listeners.Add(console);
 
-            PrintListners(source);
+            PrintListners(source.Listeners, source.Name);
 
             // 觀察實際事件紀錄的分發情形。
             TraceEventAllLevels(source);
@@ -76,8 +76,11 @@ namespace TraceSourceDemo
 
             #region Trace
 
-            // Trace 靜態類別可以想像成一個全域形式存在的 TraceSource 實體。
+            // Trace 靜態類別可以想像成是一個以全域形式存在的 TraceSource 實體。
             // Trace 沒有 SourceSwitch 的過濾機制。
+
+            PrintListners(Trace.Listeners, nameof(Trace));
+
             Trace.Listeners.Clear();
             Trace.Listeners.Add(console);
 
@@ -179,11 +182,11 @@ namespace TraceSourceDemo
         /// <summary>
         /// 觀察特定 TraceSource 目前註冊了哪些 TraceListener。
         /// </summary>
-        private static void PrintListners(TraceSource source)
+        private static void PrintListners(TraceListenerCollection listeners, string name = null)
         {
-            Console.WriteLine($"TraceSource[{source.Name}] 目前的 TraceListener 有 {source.Listeners.Count} 個：");
+            Console.WriteLine($"TraceSource[{name}] 目前的 TraceListener 有 {listeners.Count} 個：");
 
-            foreach (TraceListener listener in source.Listeners)
+            foreach (TraceListener listener in listeners)
             {
                 Console.WriteLine($"\t{listener.GetType()}");
             }
