@@ -1,0 +1,14 @@
+{
+    "LogLevel": {
+        "Default": "Error",
+        "Foo": "Debug"
+    },
+    "Console": {
+        "IncludeScopes ": true,
+        "LogLevel": {
+            "Default": "Information",
+            "Foo": "Warning",
+            "Bar": "Error"
+        }
+    }
+}

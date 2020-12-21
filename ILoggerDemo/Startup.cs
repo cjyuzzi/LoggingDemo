@@ -27,18 +27,14 @@ namespace ILoggerDemo
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ILoggerDemo", Version = "v1" });
             });
 
-            // 註冊與記錄日誌相關的服務。
-            services.AddLogging(builder =>
-            {
-                builder.ClearProviders()
-                    .AddConsole()
-                    .AddDebug();
-            });
+            //services.AddLogging(builder => builder.ClearProviders());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Pipeline started!");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,6 +52,8 @@ namespace ILoggerDemo
             {
                 endpoints.MapControllers();
             });
+
+            logger.LogInformation("Pipeline end!");
         }
     }
 }
