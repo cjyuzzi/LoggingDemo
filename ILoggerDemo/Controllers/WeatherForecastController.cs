@@ -95,5 +95,18 @@ namespace ILoggerDemo.Controllers
 
             return Ok();
         }
+
+        [Route("/LogTemplte")]
+        [HttpGet]
+        public IActionResult LogMessageTemplate()
+        {
+            var ID = 1;
+            var position = new { Latitude = 25, Longitude = 134 };
+            var elapsedMs = 34;
+
+            _logger.LogInformation("[{id}]Processed {@Position} in {elapsedMs:000} ms.", ID, position, elapsedMs);
+
+            return Ok();
+        }
     }
 }
