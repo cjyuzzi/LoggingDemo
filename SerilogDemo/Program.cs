@@ -18,10 +18,11 @@ namespace SerilogDemo
                 .AddCommandLine(args)
                 .Build();
 
+            // 設定全域 Logger。
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration) // 使用設定檔來配置。需要安裝 Serilog.Settings.Configuration
                 .MinimumLevel.Debug() // 設定最小日誌事件等級。
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information) // 針對指定的類別限制日誌事件等級。
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error) // 針對指定的類別限制日誌事件等級。
                 .Enrich.FromLogContext() // 允許使用 LogContext 擴充事件資訊。
                 .Enrich.WithThreadId() // Serilog.Enrichers.ThreadContext
                 .Enrich.WithProperty("Hello", "World") // 自由擴充更多事件資訊。
@@ -30,7 +31,7 @@ namespace SerilogDemo
                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs\\myapp.txt",
                     rollingInterval: RollingInterval.Day,
                     shared: true) // Serilog.Sinks.File
-                .WriteTo.Seq("http://localhost:5341") // Serilog.Sinks.Seq
+                .WriteTo.Seq("http://localhost:5341",apiKey: "BviK5jdM20gPckE15fwu") // Serilog.Sinks.Seq
                 .CreateLogger(); // 建立全域 Logger 物件。
 
             try
