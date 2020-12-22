@@ -22,12 +22,14 @@ namespace SerilogDemo
                 .MinimumLevel.Debug() // 砞﹚程ら粁ㄆン单
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information) // 皐癸﹚摸ら粁ㄆン单
                 .Enrich.FromLogContext() // す砛ㄏノ LogContext 耎ㄆン戈癟
+                .Enrich.WithThreadId() // Serilog.Enrichers.ThreadContext
+                .Enrich.WithProperty("Hello", "World") // パ耎ㄆン戈癟
                 .WriteTo.Debug() // Serilog.Sinks.Debug
                 .WriteTo.Console() // Serilog.Sinks.Console
                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs\\myapp.txt",
                     rollingInterval: RollingInterval.Day,
                     shared: true) // Serilog.Sinks.File
-                .WriteTo.Seq("") // Serilog.Sinks.Seq
+                .WriteTo.Seq("http://localhost:5341") // Serilog.Sinks.Seq
                 .CreateLogger(); // ミ办 Logger ン
 
             try

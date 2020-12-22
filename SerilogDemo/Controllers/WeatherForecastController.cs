@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,17 @@ namespace SerilogDemo.Controllers
 
             _logger.LogInformation("[{id}]Processed {@Position} in {elapsedMs:000} ms.", ID, position, elapsedMs);
 
+            return Ok();
+        }
+
+        [Route("/Enrich")]
+        [HttpGet]
+        public IActionResult Enrich()
+        {
+            using (LogContext.PushProperty("Key", "Value"))
+            {
+                _logger.LogInformation("Enrich with serilog!");
+            }
             return Ok();
         }
     }
