@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SerilogDemo.Controllers
 {
@@ -34,6 +33,19 @@ namespace SerilogDemo.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [Route("/Log")]
+        [HttpGet]
+        public IActionResult Log()
+        {
+            var ID = 1;
+            var position = new { Latitude = 25, Longitude = 134 };
+            var elapsedMs = 34;
+
+            _logger.LogInformation("[{id}]Processed {@Position} in {elapsedMs:000} ms.", ID, position, elapsedMs);
+
+            return Ok();
         }
     }
 }
