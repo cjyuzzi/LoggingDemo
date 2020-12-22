@@ -15,6 +15,7 @@ namespace SerilogDemo
             // 取得設定檔。
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddCommandLine(args)
                 .Build();
 
             Log.Logger = new LoggerConfiguration()
