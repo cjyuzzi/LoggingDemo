@@ -22,9 +22,8 @@ namespace ILoggerDemo.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger, ILoggerFactory loggerFactory)
         {
             _logger = logger;
-            _loggerFactory = loggerFactory;
+            //_logger = loggerFactory.CreateLogger<WeatherForecastController>();
         }
-
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
