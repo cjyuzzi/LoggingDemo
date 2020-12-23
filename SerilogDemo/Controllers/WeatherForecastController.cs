@@ -42,9 +42,20 @@ namespace SerilogDemo.Controllers
         {
             var ID = 1;
             var position = new { Latitude = 25, Longitude = 134 };
-            var elapsedMs = 34;
 
-            _logger.LogInformation("[{id}]Processed {@Position} in {elapsedMs:000} ms.", ID, position, elapsedMs);
+            _logger.LogInformation("Simulation log start by {User}[{Email}]", "Jerry", "jerryc@miniasp.com");
+
+            LogLevel[] allLevels = GetAllLogLevels();
+
+            for (int i = 0; i < allLevels.Length; i++)
+            {
+                var level = allLevels[i];
+                var elapsedMs = new Random().Next(1, 1000);
+
+                _logger.Log(level, "[{id}]Processed {@Position} in {elapsedMs:000} ms.", ID++, position, elapsedMs);
+            }
+
+            _logger.LogInformation("Simulation log end by {User}[{Email}]", "Jerry", "jerryc@miniasp.com");
 
             return Ok();
         }
@@ -58,6 +69,13 @@ namespace SerilogDemo.Controllers
                 _logger.LogInformation("Enrich with serilog!");
             }
             return Ok();
+        }
+
+        private static LogLevel[] GetAllLogLevels()
+        {
+            var allLevels = (LogLevel[])Enum.GetValues(typeof(LogLevel));
+            allLevels = allLevels.Where(l => l != LogLevel.None).ToArray();
+            return allLevels;
         }
     }
 }
