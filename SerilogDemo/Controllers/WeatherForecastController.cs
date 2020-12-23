@@ -88,7 +88,7 @@ namespace SerilogDemo.Controllers
 
             _logger.LogInformation("[Empty]{Position}", position);
             _logger.LogInformation("[@]{@Position}", position);
-            _logger.LogInformation("[$]{$Position}", position);
+            _logger.LogInformation("[$]{$Position}");
 
             return Ok();
         }

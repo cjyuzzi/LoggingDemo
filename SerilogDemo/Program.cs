@@ -13,7 +13,7 @@ namespace SerilogDemo
         public static int Main(string[] args)
         {
             // 取得設定檔。
-            var configuration = new ConfigurationBuilder()
+            IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddCommandLine(args)
                 .Build();
@@ -31,7 +31,7 @@ namespace SerilogDemo
                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs\\myapp.txt",
                     rollingInterval: RollingInterval.Day,
                     shared: true) // Serilog.Sinks.File
-                .WriteTo.Seq("http://localhost:5341",apiKey: "BviK5jdM20gPckE15fwu") // Serilog.Sinks.Seq
+                .WriteTo.Seq("http://localhost:5341",apiKey: "KcvLvUhCVmC1oVbgy6mG") // Serilog.Sinks.Seq
                 .CreateLogger(); // 建立全域 Logger 物件。
 
             try
