@@ -23,6 +23,15 @@ namespace SerilogDemo.Controllers
             _logger = logger;
         }
 
+        //private readonly ILogger _loggerA;
+        //private readonly ILogger _loggerB;
+
+        //public WeatherForecastController(ILoggerFactory loggerFactory)
+        //{
+        //    _loggerA = loggerFactory.CreateLogger("CategoryA");
+        //    _loggerB = loggerFactory.CreateLogger("CategoryB");
+        //}
+
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
