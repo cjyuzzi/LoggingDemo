@@ -47,7 +47,14 @@ namespace ILoggerDemo
                     .SetMinimumLevel(LogLevel.Information) // 設定最低的記錄等級。
                     .AddFilter(_logFilter) // 過濾日誌。
                     .ClearProviders()　// 清除記錄提供者。
-                    .AddConsole(options => options.IncludeScopes = true) // 啟動日誌範圍功能。
+                    .AddSystemdConsole(options => options.IncludeScopes = true) // 啟動日誌範圍功能。
+
+                    //.AddSimpleConsole(options => options.SingleLine = true)
+
+                    //.AddSystemdConsole(options => options.UseUtcTimestamp = true)
+
+                    //.AddJsonConsole(options => options.IncludeScopes = true)
+
                     .AddDebug()
                 )
                 .ConfigureWebHostDefaults(webBuilder =>
