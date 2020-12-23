@@ -80,6 +80,19 @@ namespace SerilogDemo.Controllers
             return Ok();
         }
 
+        [Route("/Operator")]
+        [HttpGet]
+        public ActionResult Operator()
+        {
+            var position = new { Latitude = 25, Longitude = 134 };
+
+            _logger.LogInformation("[Empty]{Position}", position);
+            _logger.LogInformation("[@]{@Position}", position);
+            _logger.LogInformation("[$]{$Position}", position);
+
+            return Ok();
+        }
+
         private static LogLevel[] GetAllLogLevels()
         {
             var allLevels = (LogLevel[])Enum.GetValues(typeof(LogLevel));
